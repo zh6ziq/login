@@ -2,6 +2,7 @@
  login system
 
 # install dependencies
+on both client and server terminal
 
 ` npm install  `
 
