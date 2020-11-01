@@ -1,17 +1,25 @@
 <template>
-<div>
-    <div>
-        <form action="">
-            <h1>Register</h1>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <b-card class="col-4 p-5 m-4">
+            <b-form>
+                <h1>Register</h1>
+                <b-form-group>
+                    <input type="text" v-model="email" name="email" placeholder="Email">
+                </b-form-group>
+                <b-form-group>
+                    <input type="password" v-model="password" name="password" placeholder="Password">
+                </b-form-group>
 
-            <input type="text" v-model="email" name="email" placeholder="Email"><br>
+                <b-form-group>
+                    <b-button variant="success" @click.prevent="register">Register</b-button>
+                </b-form-group>
 
-            <input type="password" v-model="password" name="password" placeholder="Password"><br>
+                <div class="err" v-html="error" />
 
-            <div class="err" v-html="error" /><br>
-            <button @click="register">Register</button>
-            <!--<router-link :to="{name: 'Register'}">sign in?</router-link>-->
-        </form>
+                <!--<router-link :to="{name: 'Register'}">sign in?</router-link>-->
+            </b-form>
+        </b-card>
     </div>
 </div>
 </template>
@@ -30,10 +38,13 @@ export default {
     methods: {
         async register() {
             try {
-                await AuthenticationService.register({
+                const response = await AuthenticationService.register({
                     email: this.email,
                     password: this.password
                 })
+                this.$store.dispatch('setToken', response.data.token)
+                this.$store.dispatch('setUser', response.data.user)
+
             } catch (error) {
                 this.error = error.response.data.error
             }
